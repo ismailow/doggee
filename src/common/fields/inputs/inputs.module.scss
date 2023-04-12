@@ -1,0 +1,62 @@
+.input {
+  border: none;
+  outline: none;
+  caret-color: #000;
+  color: #000;
+  font-size: 20px 14px 9px;
+  background-color: transparent;
+}
+
+.container {
+  position: relative;
+  background-color: rgba(237, 237, 237, .7);
+  border-radius: 5px;
+  transition: all .3s linear;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+  cursor: text;
+
+  &.error {
+    background-color: rgba(219, 57, 57, .3);
+    &:hover {
+      background-color: rgba(233, 86, 86, 0.3);
+    }
+  }
+
+  &:hover {
+    background-color: #ededed;
+  }
+}
+
+.formLabel {
+  position: absolute;
+  left: 16px;
+  top: 16px;
+  color: rgba(0, 0, 0, .5);
+  font-size: 14px;
+  text-transform: capitalize;
+  z-index: 1;
+  transition: all .3s linear;
+  cursor: text;
+}
+
+.formLabel.focused {
+  transform: translate(-10%, -90%);
+  font-size: 10px;
+}
+
+.passwordToggler {
+  position: absolute;
+  top: 17px;
+  right: 12px;
+  cursor: pointer;
+}
+
+.helperText {
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 16px;
+  color: #db3939;
+  padding-left: 10px;
+}

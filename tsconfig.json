@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
     "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
@@ -14,8 +15,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@common/*": ["src/common/*"],
+      "@images/*": ["src/static/images/*"],
+      "@pages": ["src/pages"],
+    },
   },
-  "include": ["src"],
-  "references": [{ "path": "./tsconfig.node.json" }]
+  "include": ["src", "**/*.d.ts"],
+  "references": [{ "path": "./tsconfig.node.json" }],
 }

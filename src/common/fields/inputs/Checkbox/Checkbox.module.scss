@@ -1,0 +1,38 @@
+.customCheckbox {
+  position: absolute;
+  z-index: -1;
+  opacity: 0;
+  & + label {
+    display: inline-flex;
+    align-items: center;
+    user-select: none;
+    font-size: 14px;
+
+    &::before {
+      content: '';
+      display: block;
+      width: 15px;
+      height: 15px;
+      margin-right: 5px;
+      flex-shrink: 0;
+      flex-grow: 0;
+      border: 2px solid rgba(245, 198, 120, .5);
+      border-radius: 5px;
+      background-repeat: no-repeat;
+      background-position: 50% 50%;
+      background-size: 125% 125%;
+      cursor: pointer;
+      transition: all .3s linear;
+    }
+  }
+
+  &:checked + label::before {
+    border-color: rgba(0, 0, 0, 0);
+    background-color: none;
+    background-image: url(../../../../static/images/checkbox.svg);
+  }
+
+  &:not(:checked) + label:hover::before {
+    border-color: rgba(245, 198, 120, 1);
+  }
+}
