@@ -1,3 +1,5 @@
+@import '../../styles/vars.scss';
+
 .page {
   min-height: 100vh;
   display: flex;
@@ -43,7 +45,7 @@
     margin-bottom: 15px;
     a {
       text-decoration: none;
-      color: #f5c678;
+      color: $primary;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;

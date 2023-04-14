@@ -12,7 +12,7 @@ export const PasswordInput: FC<InputProps> = ({
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
-  const [isFocus, setIsFocus] = useState(false);
+  // const [isFocus, setIsFocus] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const showPasswordToggle = value;
@@ -22,21 +22,19 @@ export const PasswordInput: FC<InputProps> = ({
         className={`${styles.container} ${isError ? styles.error : ''}`}
         onClick={() => inputRef.current?.focus()}
       >
-        <label
-          className={`${styles.formLabel} ${isFocus ? styles.focused : ''}`}
-          htmlFor="passwordInput"
-        >
-          {label}
-        </label>
         <input
           id="passwordInput"
           className={styles.input}
           type={type === 'password' && showPassword ? 'text' : type}
           value={value}
-          onFocus={() => setIsFocus(true)}
-          onBlur={() => !value && setIsFocus(false)}
           {...props}
         />
+        <label
+          className={`${styles.formLabel}`}
+          htmlFor="passwordInput"
+        >
+          {label}
+        </label>
         {showPasswordToggle && (
           <div
             className={styles.passwordToggler}

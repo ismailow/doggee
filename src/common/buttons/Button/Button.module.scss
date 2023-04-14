@@ -1,5 +1,11 @@
+@import '../../../styles/vars.scss';
+
 .button {
-  width: 100%;
+  width: 247px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background-color: #f5c678;
   border-radius: 5px;
   padding: 15.5px 102.5px;
@@ -12,7 +18,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #f5c678;
+    background-color: $primary;
     box-shadow: 0 2px 10px 1px rgba(0, 0, 0, .15);
   }
 

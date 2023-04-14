@@ -1,7 +1,8 @@
-import { FC, useState, ChangeEvent } from 'react';
+import { FC, useState, ChangeEvent, FormEvent } from 'react';
 import { Input, PasswordInput, Checkbox } from '@common/fields';
 import { Button } from '@common/buttons';
 import { Link } from 'react-router-dom';
+import { useMutation, useQueryLazy } from '@utils';
 
 import styles from './LoginPage.module.scss';
 
@@ -37,9 +38,21 @@ interface FofmError {
   password: string | null;
 }
 
+interface User {
+  username: string;
+  password: string;
+  id: string;
+}
+
 export const LoginPage: FC = () => {
   const [formValues, setFormValues] = useState({ username: '', password: '', notMyComp: false });
   const [formErrors, setFormErrors] = useState<FofmError>({ username: null, password: null });
+  const { mutation: authMutation, isLoading: authLoading } = useMutation<typeof formValues, User>(
+    'http://localhost:3001/auth',
+    'post'
+  );
+  const { query } = useQueryLazy('http://localhost:3001/users');
+  // console.log(data);
 
   return (
     <div className={styles.page}>
@@ -47,7 +60,16 @@ export const LoginPage: FC = () => {
         <div className={styles.headerContainer}>
           <span>DOGGEE</span>
         </div>
-        <div className={styles.formContainer}>
+        <form
+          className={styles.formContainer}
+          onSubmit={async (event: FormEvent<HTMLFormElement>) => {
+            event.preventDefault();
+            // const response = await authMutation(formValues);
+            // console.log(response.data);
+            const response = await query();
+            console.log(response);
+          }}
+        >
           <div className={styles.inputContainer}>
             <Input
               label="username"
@@ -56,13 +78,14 @@ export const LoginPage: FC = () => {
                 const username = event.target.value;
                 setFormValues({ ...formValues, username });
 
-                const error = validateLoginForm('username', username);
-                setFormErrors({ ...formErrors, username: error });
+                const inputError = validateLoginForm('username', username);
+                setFormErrors({ ...formErrors, username: inputError });
               }}
               {...(!!formErrors.username && {
                 isError: !!formErrors.username,
                 helperText: formErrors.username,
               })}
+              disabled={authLoading}
             />
           </div>
           <div className={styles.inputContainer}>
@@ -73,13 +96,14 @@ export const LoginPage: FC = () => {
                 const password = event.target.value;
                 setFormValues({ ...formValues, password });
 
-                const error = validateLoginForm('password', password);
-                setFormErrors({ ...formErrors, password: error });
+                const inputError = validateLoginForm('password', password);
+                setFormErrors({ ...formErrors, password: inputError });
               }}
               {...(!!formErrors.password && {
                 isError: !!formErrors.password,
                 helperText: formErrors.password,
               })}
+              disabled={authLoading}
             />
           </div>
           <div className={styles.checkboxContainer}>
@@ -93,9 +117,15 @@ export const LoginPage: FC = () => {
             />
           </div>
           <div>
-            <Button isLoading>Sign In</Button>
+            <Button
+              isLoading={authLoading}
+              type="submit"
+              disabled={authLoading}
+            >
+              Sign In
+            </Button>
           </div>
-        </div>
+        </form>
         <div className={styles.signUpContainer}>
           <Link to="/registration">Create new account</Link>
         </div>

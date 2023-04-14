@@ -5,6 +5,19 @@
   color: #000;
   font-size: 20px 14px 9px;
   background-color: transparent;
+
+  &:focus + .formLabel,
+  &:not([value=""]) + .formLabel {
+    transform: translate(-10%, -90%);
+    font-size: 10px;
+  }
+}
+
+.input:focus {
+  .formLabel {
+    transform: translate(-10%, -90%);
+    font-size: 10px;
+  }
 }
 
 .container {
