@@ -19,6 +19,7 @@ export const PasswordInput: FC<InputProps> = ({
   return (
     <>
       <div
+        aria-disabled={props.disabled}
         className={`${styles.container} ${isError ? styles.error : ''}`}
         onClick={() => inputRef.current?.focus()}
       >

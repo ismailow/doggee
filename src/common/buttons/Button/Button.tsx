@@ -8,7 +8,10 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 export const Button: FC<ButtonProps> = ({ children, isLoading = false }) => {
   return (
-    <button className={styles.button}>
+    <button
+      className={styles.button}
+      disabled={isLoading}
+    >
       {!isLoading && children}
       {isLoading && <div className={styles.dotFlashing} />}
     </button>

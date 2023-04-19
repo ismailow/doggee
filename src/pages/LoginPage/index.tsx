@@ -2,7 +2,8 @@ import { FC, useState, ChangeEvent, FormEvent } from 'react';
 import { Input, PasswordInput, Checkbox } from '@common/fields';
 import { Button } from '@common/buttons';
 import { Link } from 'react-router-dom';
-import { useMutation, useQueryLazy } from '@utils';
+import { api, useMutation, setCookie } from '@utils';
+import { IntlText, useIntl, useTheme } from '@features';
 
 import styles from './LoginPage.module.scss';
 
@@ -45,17 +46,20 @@ interface User {
 }
 
 export const LoginPage: FC = () => {
+  const { theme, setTheme } = useTheme();
+
   const [formValues, setFormValues] = useState({ username: '', password: '', notMyComp: false });
   const [formErrors, setFormErrors] = useState<FofmError>({ username: null, password: null });
-  const { mutation: authMutation, isLoading: authLoading } = useMutation<typeof formValues, User>(
-    'http://localhost:3001/auth',
-    'post'
+  const { mutation: authMutation, isLoading: authLoading } = useMutation<typeof formValues, User>((values) =>
+    api.post('auth', values)
   );
-  const { query } = useQueryLazy('http://localhost:3001/users');
-  // console.log(data);
+  // const { data, isLoading } = useQuery<User[]>(() => api.get('users'));
+  const intl = useIntl();
+  // console.log(intl);
 
   return (
     <div className={styles.page}>
+      <button onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>change theme</button>
       <div className={styles.container}>
         <div className={styles.headerContainer}>
           <span>DOGGEE</span>
@@ -65,9 +69,9 @@ export const LoginPage: FC = () => {
           onSubmit={async (event: FormEvent<HTMLFormElement>) => {
             event.preventDefault();
             // const response = await authMutation(formValues);
-            // console.log(response.data);
-            const response = await query();
-            console.log(response);
+            // if (response && formValues.notMyComp) {
+            //   setCookie('dont-trust-this-device', new Date().getTime() + 30 * 60000);
+            // }
           }}
         >
           <div className={styles.inputContainer}>
@@ -114,6 +118,7 @@ export const LoginPage: FC = () => {
                 const value = event.target.checked;
                 setFormValues({ ...formValues, notMyComp: value });
               }}
+              disabled={authLoading}
             />
           </div>
           <div>
@@ -122,12 +127,16 @@ export const LoginPage: FC = () => {
               type="submit"
               disabled={authLoading}
             >
-              Sign In
+              <IntlText path="button.signIn" />
+              {/* {intl.translateMessage('button.signIn', { test: 'asdasdasfasf' })} */}
             </Button>
           </div>
         </form>
         <div className={styles.signUpContainer}>
-          <Link to="/registration">Create new account</Link>
+          {/* <Link to="/registration">Create new account</Link> */}
+          <Link to="/registration">
+            <IntlText path="pages.login.createNewAccount" />
+          </Link>
         </div>
       </div>
     </div>

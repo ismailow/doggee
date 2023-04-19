@@ -10,12 +10,7 @@ interface User {
   id: string;
 }
 
-export const useMutation = <T, K>(
-  url: string,
-  method: MutationMethods,
-  // eslint-disable-next-line no-undef
-  config?: Omit<RequestInit, 'method'>
-) => {
+export const useMutation = <T, K>(request: (body: T) => Promise<any>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [status, setStatus] = useState(0);
@@ -24,20 +19,10 @@ export const useMutation = <T, K>(
   const mutation = useCallback(async (body: T): Promise<ApiResponse<K>> => {
     setIsLoading(true);
     try {
-      const response = await fetch(url, {
-        credentials: 'same-origin',
-        method,
-        ...config,
-        headers: {
-          'Content-Type': 'application/json',
-          ...config?.headers,
-        },
-        ...(body && { body: JSON.stringify(body) }),
+      return await request(body).then(async (response) => {
+        setStatus(response.status);
+        return response.data;
       });
-      // const responseData = (await response.json()) as Promise<ApiResponse<K>>;
-      const responseData = await response.json();
-      setStatus(response.status);
-      return responseData;
     } catch (e: any) {
       setError(e);
       return { success: false, data: { message: (e as Error).message } };

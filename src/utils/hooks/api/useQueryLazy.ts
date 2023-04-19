@@ -1,12 +1,8 @@
-import { useState, useCallback, DependencyList } from 'react';
+import { useState, useCallback } from 'react';
 
 import { ApiResponse } from './types';
 
-export const useQueryLazy = <T, K>(
-  url: string,
-  // eslint-disable-next-line no-undef
-  config?: Omit<RequestInit, 'method'>
-) => {
+export const useQueryLazy = <K>(request: () => Promise<any>) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
   const [status, setStatus] = useState(0);
@@ -15,19 +11,11 @@ export const useQueryLazy = <T, K>(
     async (): Promise<ApiResponse<K>> => {
       setIsLoading(true);
       try {
-        const response = await fetch(url, {
-          method: 'GET',
-          credentials: 'same-origin',
-          ...config,
-          headers: {
-            'Content-Type': 'application/json',
-            ...config?.headers,
-          },
+        setIsLoading(false);
+        return request().then(async (res) => {
+          setStatus(res.status);
+          return res.data;
         });
-        // const responseData = (await response.json()) as Promise<ApiResponse<K>>;
-        const responseData = await response.json();
-        setStatus(response.status);
-        return responseData;
       } catch (e: any) {
         setError(e);
         return { success: false, data: { message: (e as Error).message } };
